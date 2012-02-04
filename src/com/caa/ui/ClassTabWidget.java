@@ -41,6 +41,13 @@ public class ClassTabWidget extends TabActivity {
 	    				res.getDrawable(R.layout.ic_tab_grades))
 	    			.setContent(intent);
 	    tabHost.addTab(spec);
+	    
+	    intent = new Intent().setClass(this, FilesViewActivity.class);
+	    
+	    spec = tabHost.newTabSpec("syllabus").setIndicator("Files",
+	    				res.getDrawable(R.layout.ic_tab_grades))
+	    			.setContent(intent);
+	    tabHost.addTab(spec);
 
 	    tabHost.setCurrentTab(0);
 	}
