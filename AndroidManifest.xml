@@ -11,7 +11,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name=".BSpaceMobileActivity"
+            android:name="com.caa.ui.BSpaceMobileActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +20,8 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".ClassViewActivity" android:label="Classes"> </activity>
-        <activity android:name=".LinksViewActivity" android:label="Links"> </activity>
+        <activity android:name="com.caa.ui.ClassViewActivity" android:label="Classes"> </activity>
+        <activity android:name="com.caa.ui.LinksViewActivity" android:label="Links"> </activity>
             
     </application>
 

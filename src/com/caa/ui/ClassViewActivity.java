@@ -1,6 +1,9 @@
-package com.caa.bspace;
+package com.caa.ui;
 
 import java.util.ArrayList;
+
+import com.caa.bspace.R;
+import com.caa.bspace.R.layout;
 
 import android.app.ListActivity;
 import android.content.Intent;
