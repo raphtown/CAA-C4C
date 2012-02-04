@@ -14,7 +14,8 @@ public class SyllabusViewActivity extends Activity {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.syllabus);
 	    
-//	    BSpaceSyllabusResource rc = BSpaceMobileActivity.currentClass;
+	    BSpaceSyllabusResource rc = new BSpaceSyllabusResource(BSpaceMobileActivity.currentClass, BSpaceMobileActivity.currentClass.uuidMap.get("Syllabus"));
+	    rc.getHtml();
 
 	    mWebView = (WebView) findViewById(R.id.webview);
 	    mWebView.getSettings().setJavaScriptEnabled(true);
