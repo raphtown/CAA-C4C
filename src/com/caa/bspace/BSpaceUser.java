@@ -20,6 +20,7 @@ import org.apache.http.impl.client.BasicCookieStore;
 import android.util.Log;
 
 import org.apache.http.client.protocol.ClientContext;
+import org.htmlcleaner.*;
 
 public class BSpaceUser {
     
@@ -27,11 +28,24 @@ public class BSpaceUser {
     
     private static final String BSPACE_LOGIN_URL = "https://auth.berkeley.edu/cas/login?service=https%3A%2F%2Fbspace.berkeley.edu%2Fsakai-login-tool%2Fcontainer&renew=true";
     private static final String BSPACE_PORTAL_URL = "https://bspace.berkeley.edu/portal/";
+    
+    private static final String XPATH_CLASSES = "//ul[@id='siteLinkList']//a";
 
+    private LinkedList<BSpaceClass> classes;
     public String htmlSource;
     private HttpClient httpClient;
     private CookieStore cookieStore;
     private HttpContext localContext;
+    
+    public BSpaceUser(String username, String password) {
+        classes = new LinkedList<BSpaceClass>(); 
+        httpClient = new DefaultHttpClient();
+        cookieStore = new BasicCookieStore();
+        localContext = new BasicHttpContext();
+        localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+        calnetLogin(username, password);
+        getMainPage();
+    }
     
     private String getCalnetNoOpConversation(){
     	HttpGet calnetLoginGet = new HttpGet(BSPACE_LOGIN_URL);
@@ -87,6 +101,8 @@ public class BSpaceUser {
     private String getMainPage() {
     	HttpGet mainPageGet = new HttpGet(BSPACE_PORTAL_URL);
     	
+    	System.out.println("IN getMainPage");
+    	
     	try{
     		 HttpResponse response = httpClient.execute(mainPageGet, localContext);
     		 BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
@@ -95,21 +111,31 @@ public class BSpaceUser {
              while ((line = rd.readLine()) != null) {
                  sb.append(line);
              }
-             htmlSource = sb.toString();
+             parseClasses(sb.toString());
              Log.d(TAG, htmlSource);
     	} catch (Exception e){
     	}
-    	return "no";
+    	return null;
     }
     
-    public BSpaceUser(String username, String password) {
-    	httpClient = new DefaultHttpClient();
-        cookieStore = new BasicCookieStore();
-        //httpClient.getParams().setParameter(ClientPNames.MAX_REDIRECTS, 3); 
-        localContext = new BasicHttpContext();
-        localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-
-        calnetLogin(username, password);
-        getMainPage();
+    private void parseClasses(String html) {
+        System.out.println("IN parseClasses");
+        HtmlCleaner cleaner = new HtmlCleaner();
+        TagNode root = cleaner.clean(html);
+        
+        try {
+            Object[] classEls = root.evaluateXPath(XPATH_CLASSES);
+            for (Object obj : classEls) {
+                TagNode el = (TagNode) obj;
+                String[] components = el.getAttributeByName("href").split("/");
+                if (components.length > 1)
+                    this.classes.add(new BSpaceClass(components[components.length - 1], el.getText().toString()));
+            }
+            System.out.println("Class links: "+ this.classes.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
+
 }
