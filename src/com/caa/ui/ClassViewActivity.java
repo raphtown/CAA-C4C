@@ -22,8 +22,8 @@ import android.widget.Toast;
 
 public class ClassViewActivity extends ListActivity {
 	
-
-	ArrayList<String> listItems=new ArrayList<String>();
+	static BSpaceClass bspaceClass;
+	ArrayList<BSpaceClass> listItems=new ArrayList<BSpaceClass>();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,10 +31,10 @@ public class ClassViewActivity extends ListActivity {
 	  Iterator<BSpaceClass> i = BSpaceMobileActivity.user.classes.iterator();
 	  while(i.hasNext())
 	  {
-		  listItems.add(i.next().name);
+		  listItems.add(i.next());
 	  }
 
-	  setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, listItems));
+	  setListAdapter(new ArrayAdapter<BSpaceClass>(this, R.layout.list_item, listItems));
 
 	  ListView lv = getListView();
 	  lv.setTextFilterEnabled(true);

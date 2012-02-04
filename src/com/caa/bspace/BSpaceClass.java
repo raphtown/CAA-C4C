@@ -43,5 +43,9 @@ public class BSpaceClass {
             e.printStackTrace();
         }
     }
+    
+    public String toString(){
+    	return name;
+    }
 
 }

@@ -20,7 +20,7 @@ public class FilesViewActivity extends ListActivity
 	public void onCreate(Bundle savedInstanceState) {
 		  super.onCreate(savedInstanceState);
 
-		  listItems.add("LOL");
+		  
 		  adapter= new ArrayAdapter<String>(this, R.layout.list_item, listItems);
 		  setListAdapter(adapter);
 
