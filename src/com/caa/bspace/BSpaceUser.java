@@ -21,7 +21,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.client.CookieStore;
 import org.apache.http.impl.client.BasicCookieStore;
 
-import android.util.Base64;
 import android.util.Log;
 
 import org.apache.http.client.protocol.ClientContext;

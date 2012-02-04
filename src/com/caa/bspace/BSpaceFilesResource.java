@@ -45,8 +45,7 @@ public class BSpaceFilesResource {
 			this.name = name;
 			url = parentDirectory.url + "/" + Uri.encode(this.name);
 			
-			subdirectories = new ArrayList<BSpaceDirectory>();
-			files = new ArrayList<BSpaceFile>();
+			
 		}
 		
 		public void getItems(){
@@ -56,6 +55,9 @@ public class BSpaceFilesResource {
 			int tableEndIndex = html.indexOf("</table>", tableStartIndex) - "</table>".length();
 			
 			String tableHtml = html.substring(tableStartIndex, tableEndIndex);
+			
+			subdirectories = new ArrayList<BSpaceDirectory>();
+			files = new ArrayList<BSpaceFile>();
 			
 			for(String tableRow : tableHtml.split("</tr>")){
 				String nameSegment = tableRow.split("</a>")[0];
@@ -71,8 +73,10 @@ public class BSpaceFilesResource {
 					Log.e("panda", "FILES IS NULL");
 				}
 				if(tableRow.contains("<b>Folder</b>")){
+					Log.d("bspacefile", "Adding directory " + name);
 					subdirectories.add(new BSpaceDirectory(this, name));
 				} else {
+					Log.d("bspacefile", "Adding file " + name);
 					files.add(new BSpaceFile(this, name));
 				}
 			}
@@ -85,13 +89,5 @@ public class BSpaceFilesResource {
 		
 		rootDirectory = new BSpaceDirectory();
 		rootDirectory.getItems();
-		
-		Log.w("panda",rootDirectory.files.toString());
-		for(BSpaceFile file : rootDirectory.files){
-			Log.d("bspacefile", file.name);
-		}
-		for(BSpaceDirectory dir : rootDirectory.subdirectories){
-			Log.d("bspacedir", dir.name);
-		}
 	}
 }
