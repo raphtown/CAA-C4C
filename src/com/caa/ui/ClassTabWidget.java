@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 public class ClassTabWidget extends TabActivity {
+	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.classtab);
@@ -34,7 +35,9 @@ public class ClassTabWidget extends TabActivity {
 	    			.setContent(intent);
 	    tabHost.addTab(spec);
 
-	    spec = tabHost.newTabSpec("grades").setIndicator("Syllabus",
+	    intent = new Intent().setClass(this, SyllabusViewActivity.class);
+	    
+	    spec = tabHost.newTabSpec("syllabus").setIndicator("Syllabus",
 	    				res.getDrawable(R.layout.ic_tab_grades))
 	    			.setContent(intent);
 	    tabHost.addTab(spec);
