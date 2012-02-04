@@ -58,8 +58,6 @@ public class BSpaceMobileActivity extends Activity implements OnClickListener {
         
         Button button = (Button)findViewById(R.id.loginsubmit);
         button.setOnClickListener(this);
-        BSpaceUser user = new BSpaceUser("chinesedewey", "password OCF 1");
-       BSpaceFilesResource a = new BSpaceFilesResource(user, "30530304-7b27-4b33-9572-592fade4c2e8");
     }
 
 	@Override
