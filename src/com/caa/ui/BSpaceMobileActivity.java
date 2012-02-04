@@ -12,12 +12,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.caa.bspace.BSpaceUser;
-import com.caa.bspace.R;
+import com.caa.bspace.*;
 
 public class BSpaceMobileActivity extends Activity implements OnClickListener {
     /** Called when the activity is first created. */
-	static BSpaceUser user;
+	static BSpaceUser currentUser;
+	static BSpaceClass currentClass;
+	
 	final Handler myHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			Button submit = (Button) findViewById(R.id.loginsubmit);
@@ -25,13 +26,12 @@ public class BSpaceMobileActivity extends Activity implements OnClickListener {
 			
 			ProgressBar mProgress = (ProgressBar) findViewById(R.id.loginprogress);
 			mProgress.setVisibility(ProgressBar.GONE);
-			if(user.classes.size() == 0)
+			if(currentUser.classes.size() == 0)
 			{
 				Toast.makeText(BSpaceMobileActivity.this.getApplicationContext(), "Invalid Password", Toast.LENGTH_SHORT).show();
 			}
 			else
 			{
-
 				 Intent myIntent = new Intent(BSpaceMobileActivity.this, ClassViewActivity.class);
 			     BSpaceMobileActivity.this.startActivity(myIntent);
 
@@ -74,7 +74,7 @@ public class BSpaceMobileActivity extends Activity implements OnClickListener {
 				String username = ((TextView)findViewById(R.id.loginentry)).getText().toString();
 				String userpassword = ((TextView)findViewById(R.id.passwordentry)).getText().toString();
 				
-		    	BSpaceMobileActivity.user = new BSpaceUser(username,
+		    	BSpaceMobileActivity.currentUser = new BSpaceUser(username,
 						userpassword);
 		    	Message msg = myHandler.obtainMessage();
 				myHandler.sendMessage(msg);

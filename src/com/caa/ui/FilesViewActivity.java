@@ -23,7 +23,7 @@ public class FilesViewActivity extends ListActivity
 	public void onCreate(Bundle savedInstanceState) {
 		  super.onCreate(savedInstanceState);
 		  
-		  BSpaceFilesResource filesResource = new BSpaceFilesResource(BSpaceMobileActivity.user, ClassViewActivity.bspaceClass);
+		  BSpaceFilesResource filesResource = new BSpaceFilesResource(BSpaceMobileActivity.currentUser, BSpaceMobileActivity.currentClass);
 		  
 		  for(BSpaceFilesItem subdirectory : filesResource.rootDirectory.subdirectories){
 			  listItems.add(subdirectory);
