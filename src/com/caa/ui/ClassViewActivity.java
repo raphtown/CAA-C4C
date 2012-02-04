@@ -38,7 +38,7 @@ public class ClassViewActivity extends ListActivity {
 	    public void onItemClick(AdapterView<?> parent, View view,
 	        int position, long id) {
 	      // When clicked, show a toast with the TextView text
-	    	Intent myIntent = new Intent(ClassViewActivity.this, LinksViewActivity.class);
+	    	Intent myIntent = new Intent(ClassViewActivity.this, ClassTabWidget.class);
 			 ClassViewActivity.this.startActivity(myIntent);
 	    }
 	  });

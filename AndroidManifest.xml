@@ -22,7 +22,9 @@
         
         <activity android:name="com.caa.ui.ClassViewActivity" android:label="Classes"> </activity>
         <activity android:name="com.caa.ui.LinksViewActivity" android:label="Links"> </activity>
-            
+        <activity android:name="com.caa.ui.GradeViewActivity" android:label="Grade"> </activity>
+        <activity android:name="com.caa.ui.ClassTabWidget" android:label="@string/app_name"
+          android:theme="@android:style/Theme.NoTitleBar"> </activity>
     </application>
 
 </manifest>
