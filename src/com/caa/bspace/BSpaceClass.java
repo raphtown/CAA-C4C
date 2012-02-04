@@ -61,7 +61,8 @@ public class BSpaceClass {
                 if (resourceName.equals("Syllabus")) {
                     rsrc = new BSpaceSyllabusResource(this, uuid);
                 } else if (resourceName.equals("Resources")) {
-                    rsrc = new BSpaceFileResource(this, uuid);
+                    rsrc = new BSpaceFilesResource(this, uuid);
+                    ((BSpaceFilesResource) rsrc).initUser(user);
                 } else if (resourceName.equals("Gradebook")) {
                     rsrc = new BSpaceGradebookResource(this, uuid);
                 } else {
