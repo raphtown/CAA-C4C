@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -64,6 +65,8 @@ public class FilesViewActivity extends ListActivity
 				    		Log.d("filesview", "Pretend I'm doing something with dir " + selectedDirectory);
 				    		FilesViewActivity.this.startActivity(new Intent(FilesViewActivity.this, FilesViewActivity.class).putExtra("requestedDirectory", selectedDirectory.url));
 				    	} else {
+				    		BSpaceFile selectedFile = (BSpaceFile) selectedItem;
+				    		FilesViewActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(selectedFile.url)));
 				    		Log.d("filesview", "What do I do with this file? " + selectedItem);
 				    	}
 				    	 adapter.notifyDataSetChanged();

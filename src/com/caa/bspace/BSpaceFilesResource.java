@@ -21,6 +21,7 @@ public class BSpaceFilesResource implements BSpaceResource {
     public class BSpaceFilesItem{
     	protected BSpaceDirectory parentDirectory;
     	protected String name;
+    	public String url;
 
 	}
     
@@ -30,6 +31,11 @@ public class BSpaceFilesResource implements BSpaceResource {
         public BSpaceFile(BSpaceDirectory parentDirectory, String name) {
             this.parentDirectory = parentDirectory;
             this.name = Html.fromHtml(name).toString();
+            try {
+				url = parentDirectory.url + "/" + java.net.URLEncoder.encode(this.name, "utf-8").replace("+", "%20");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
         }
         
         public String toString(){
@@ -40,8 +46,6 @@ public class BSpaceFilesResource implements BSpaceResource {
     public class BSpaceDirectory extends BSpaceFilesItem{
         public ArrayList<BSpaceDirectory> subdirectories;
         public ArrayList<BSpaceFile> files;
-        
-        public String url;
 
         public String toString(){
 			return name;
