@@ -28,14 +28,29 @@ public class BSpaceMobileActivity extends Activity implements OnClickListener {
 			if(user.classes.size() == 0)
 			{
 				Toast.makeText(BSpaceMobileActivity.this.getApplicationContext(), "Invalid Password", Toast.LENGTH_SHORT).show();
+			
+				submit.setEnabled(true);
+				submit.setClickable(true);
+				submit.setVisibility(Button.VISIBLE);
 			}
 			else
 			{
 
 				 Intent myIntent = new Intent(BSpaceMobileActivity.this, ClassViewActivity.class);
 			     BSpaceMobileActivity.this.startActivity(myIntent);
+			     
+			     Message msg2 = revisibleHandler.obtainMessage();
+			     revisibleHandler.sendMessageDelayed(msg2, 1000);
 
 			}
+
+		}
+	};
+	
+	final Handler revisibleHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			Button submit = (Button) findViewById(R.id.loginsubmit);
+			
 			submit.setEnabled(true);
 			submit.setClickable(true);
 			submit.setVisibility(Button.VISIBLE);
@@ -54,6 +69,15 @@ public class BSpaceMobileActivity extends Activity implements OnClickListener {
         button.setOnClickListener(this);
     }
 
+    public void onResume(Bundle savedInstanceState)
+    {
+    	Button submit = (Button) findViewById(R.id.loginsubmit);
+		submit.setEnabled(true);
+		submit.setClickable(true);
+		submit.setVisibility(Button.VISIBLE);
+    	
+    }
+    
 	@Override
 	public void onClick(View arg0) {	
 		ProgressBar mProgress = (ProgressBar) findViewById(R.id.loginprogress);
