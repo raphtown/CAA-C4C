@@ -23,7 +23,7 @@ public class ClassTabWidget extends TabActivity {
         intent = new Intent().setClass(this, GradeViewActivity.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("grades").setIndicator("Gradebook", res.getDrawable(R.layout.gradebooktab)).setContent(intent);
+        spec = tabHost.newTabSpec("grades").setIndicator("Gradebook", res.getDrawable(R.layout.gradetab)).setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, LinksViewActivity.class);
