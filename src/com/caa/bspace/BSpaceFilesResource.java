@@ -2,6 +2,7 @@ package com.caa.bspace;
 
 import java.util.ArrayList;
 
+import org.apache.http.HttpConnection;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.w3c.dom.Node;
@@ -28,8 +29,8 @@ public class BSpaceFilesResource {
 	}
 	
 	private class BSpaceDirectory{
-		private ArrayList<BSpaceDirectory> subdirectories;
-		private ArrayList<BSpaceFile> files;
+		public ArrayList<BSpaceDirectory> subdirectories;
+		public ArrayList<BSpaceFile> files;
 		
 		private BSpaceDirectory parentDirectory;
 		private String name;
@@ -43,33 +44,54 @@ public class BSpaceFilesResource {
 			this.parentDirectory = parentDirectory;
 			this.name = name;
 			url = parentDirectory.url + "/" + Uri.encode(this.name);
+			
+			subdirectories = new ArrayList<BSpaceDirectory>();
+			files = new ArrayList<BSpaceFile>();
 		}
 		
 		public void getItems(){
-			String html = "<html><head><link href=\"https://bspace.berkeley.edu/css/default.css\" type=\"text/css\" rel=\"stylesheet\" media=\"screen\" /><STYLE type=\"text/css\"><!-- td {padding-right: .5em} --> </STYLE> </head><body> <div style=\"padding: 16px\"> <h2>Contents of /dav/1c446e0d-afa9-4dd3-aba9-1d82ad8af048/</h2> <table> <tr><td><a href=\"Discussion%20Sections/\">Discussion Sections</a></td><td><b>Folder</b></td><td></td><td></td><td></td></tr> <tr><td><a href=\"Homework%20Solutions/\">Homework Solutions</a></td><td><b>Folder</b></td><td></td><td></td><td></td></tr> <tr><td><a href=\"Homeworks/\">Homeworks</a></td><td><b>Folder</b></td><td></td><td></td><td></td></tr>  <tr><td><a href=\"Lecture%20Notes/\">Lecture Notes</a></td><td><b>Folder</b></td><td></td><td></td><td></td></tr> </table></div></body></html>";
-			HtmlCleaner cleaner = new HtmlCleaner();
-			TagNode rootNode = cleaner.clean(html);
+			String html = user.openPageWithAuth(url);
 			
-			try {
-	            NodeList[] classEls = (NodeList) rootNode.evaluateXPath("//a");
-	            for (Node node : classEls) {
-	                String name = node.getChildNodes();
-	                Log.d("bspaceuser", name);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
+			int tableStartIndex = html.indexOf("<table>") + "<table>".length();
+			int tableEndIndex = html.indexOf("</table>", tableStartIndex) - "</table>".length();
+			
+			String tableHtml = html.substring(tableStartIndex, tableEndIndex);
+			
+			for(String tableRow : tableHtml.split("</tr>")){
+				String nameSegment = tableRow.split("</a>")[0];
+				String name = nameSegment.substring(nameSegment.lastIndexOf("\">") + 2);
+				
+				if (name == "Up one level"){
+					continue;
+				}
+				if(subdirectories == null){
+					Log.e("panda", "SUBDIRECTORIES IS NULL");
+				}
+				if(files == null){
+					Log.e("panda", "FILES IS NULL");
+				}
+				if(tableRow.contains("<b>Folder</b>")){
+					subdirectories.add(new BSpaceDirectory(this, name));
+				} else {
+					files.add(new BSpaceFile(this, name));
+				}
+			}
 		}
 	}
 	
-	private String getRootDavUrl(){
-		return "https://bspace.berkeley.edu/dav/" + classUid;
-	}
-	
-	public BSpaceFilesResource(String classUid, BSpaceUser user){
+	public BSpaceFilesResource(BSpaceUser user, String classUid){
 		this.classUid = classUid;
 		this.user = user;
 		
 		rootDirectory = new BSpaceDirectory();
 		rootDirectory.getItems();
+		
+		Log.w("panda",rootDirectory.files.toString());
+		for(BSpaceFile file : rootDirectory.files){
+			Log.d("bspacefile", file.name);
+		}
+		for(BSpaceDirectory dir : rootDirectory.subdirectories){
+			Log.d("bspacedir", dir.name);
+		}
 	}
 }
