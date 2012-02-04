@@ -1,11 +1,5 @@
 package com.caa.ui;
 
-import com.caa.bspace.BSpaceFilesResource;
-import com.caa.bspace.BSpaceUser;
-import com.caa.bspace.R;
-import com.caa.bspace.R.id;
-import com.caa.bspace.R.layout;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
