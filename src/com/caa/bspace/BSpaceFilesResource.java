@@ -1,8 +1,13 @@
 package com.caa.bspace;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.text.Html;
 import android.util.Log;
 
 public class BSpaceFilesResource implements BSpaceResource {
@@ -11,17 +16,21 @@ public class BSpaceFilesResource implements BSpaceResource {
     private BSpaceUser user;
 
     public BSpaceDirectory rootDirectory;
+    
+    public static HashMap<String, BSpaceDirectory> directoryMap = new HashMap<String, BSpaceDirectory>();
 
-    public interface BSpaceFilesItem{
+    public class BSpaceFilesItem{
+    	protected BSpaceDirectory parentDirectory;
+    	protected String name;
+
 	}
     
-    private class BSpaceFile implements BSpaceFilesItem{
-        private BSpaceDirectory parentDirectory;
-        private String name;
+    public class BSpaceFile extends BSpaceFilesItem{
+        
 
         public BSpaceFile(BSpaceDirectory parentDirectory, String name) {
             this.parentDirectory = parentDirectory;
-            this.name = name;
+            this.name = Html.fromHtml(name).toString();
         }
         
         public String toString(){
@@ -29,40 +38,44 @@ public class BSpaceFilesResource implements BSpaceResource {
 		}
     }
 
-    public class BSpaceDirectory implements BSpaceFilesItem{
+    public class BSpaceDirectory extends BSpaceFilesItem{
         public ArrayList<BSpaceDirectory> subdirectories;
         public ArrayList<BSpaceFile> files;
-
-        private BSpaceDirectory parentDirectory;
-        private String name;
-        private String url;
+        
+        public String url;
 
         public String toString(){
 			return name;
 		}
         
         public BSpaceDirectory() {
-            url = "https://bspace.berkeley.edu/dav/" + ownerClass.uuid;
+            url = "https://bspace.berkeley.edu/dav/group/" + ownerClass.uuid;
         }
 
         public BSpaceDirectory(BSpaceDirectory parentDirectory, String name) {
             this.parentDirectory = parentDirectory;
-            this.name = name;
-            url = parentDirectory.url + "/" + Uri.encode(this.name);
-
+            this.name = Html.fromHtml(name).toString();
+            try {
+				url = parentDirectory.url + "/" + java.net.URLEncoder.encode(this.name, "utf-8").replace("+", "%20");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+            directoryMap.put(url, this);
         }
 
         public void getItems() {
             String html = user.openPageWithAuth(url);
+            Log.d("bspacedirectory", html);
 
             subdirectories = new ArrayList<BSpaceDirectory>();
             files = new ArrayList<BSpaceFile>();
             
             int tableStartIndex = html.indexOf("<table>") + "<table>".length();
-            int tableEndIndex = html.indexOf("</table>", tableStartIndex) - "</table>".length();
+            int tableEndIndex = html.indexOf("</table>", tableStartIndex);
 
-            if(tableStartIndex == -1 || tableEndIndex == -1){
-            	Log.w("bspacefiles", "Unable to parse table");
+            Log.d("tableindex", tableStartIndex + " to " + tableEndIndex);
+            if(tableStartIndex == -1 || tableEndIndex == -1 || tableStartIndex == tableEndIndex){
+            	Log.w("bspacefiles", "No table to parse");
             	return;
             }
             
@@ -72,7 +85,7 @@ public class BSpaceFilesResource implements BSpaceResource {
                 String nameSegment = tableRow.split("</a>")[0];
                 String name = nameSegment.substring(nameSegment.lastIndexOf("\">") + 2);
 
-                if (name == "Up one level") {
+                if (name.equals("Up one level")){
                     continue;
                 }
                 if (subdirectories == null) {
