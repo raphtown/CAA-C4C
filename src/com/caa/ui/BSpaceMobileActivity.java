@@ -12,14 +12,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.TextView;
 
 public class BSpaceMobileActivity extends Activity implements OnClickListener {
     /** Called when the activity is first created. */
+	static BSpaceUser user;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        ProgressBar mProgress = (ProgressBar) findViewById(R.id.loginprogress);
+		mProgress.setVisibility(ProgressBar.GONE);
         
         Button button = (Button)findViewById(R.id.loginsubmit);
         button.setOnClickListener(this);
@@ -29,7 +36,30 @@ public class BSpaceMobileActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View arg0) {
-	//	Toast.makeText(this, "Beep Bop", Toast.LENGTH_SHORT).show();
+	//	
+		ProgressBar mProgress = (ProgressBar) findViewById(R.id.loginprogress);
+		
+		
+		// DERP this doesn't work
+		mProgress.setVisibility(ProgressBar.VISIBLE);
+		
+    	String username = ((TextView)findViewById(R.id.loginentry)).getText().toString();
+		String userpassword = ((TextView)findViewById(R.id.passwordentry)).getText().toString();
+		
+    	BSpaceMobileActivity.user = new BSpaceUser(username,
+				userpassword);
+		
+		mProgress.setVisibility(ProgressBar.GONE);
+		
+
+		if(user.classes.size() == 0)
+		{
+			Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		
+
 		 Intent myIntent = new Intent(BSpaceMobileActivity.this, ClassViewActivity.class);
 	     BSpaceMobileActivity.this.startActivity(myIntent);
 		

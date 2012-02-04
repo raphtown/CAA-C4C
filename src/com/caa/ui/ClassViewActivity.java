@@ -1,7 +1,9 @@
 package com.caa.ui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import com.caa.bspace.BSpaceClass;
 import com.caa.bspace.R;
 import com.caa.bspace.R.layout;
 
@@ -26,9 +28,12 @@ public class ClassViewActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
-	  listItems.add("African American Studies 61A");
-	  listItems.add("Jay Kong");
-	  listItems.add("Captain Planet");
+	  Iterator<BSpaceClass> i = BSpaceMobileActivity.user.classes.iterator();
+	  while(i.hasNext())
+	  {
+		  listItems.add(i.next().name);
+	  }
+
 	  setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, listItems));
 
 	  ListView lv = getListView();
