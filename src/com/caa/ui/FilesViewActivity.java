@@ -29,7 +29,7 @@ public class FilesViewActivity extends ListActivity
 			  listItems.add(subdirectory);
 		  }
 		  for(BSpaceFilesItem file: filesResource.rootDirectory.files){
-			  listItems.add(file);
+			  listItems.add(file);// do nothing
 		  }
 		  
 		  adapter= new ArrayAdapter<BSpaceFilesItem>(this, R.layout.list_item, listItems);
