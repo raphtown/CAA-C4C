@@ -25,7 +25,7 @@ public class FilesViewActivity extends ListActivity
 	public void onCreate(Bundle savedInstanceState) {
 		  super.onCreate(savedInstanceState);
 		  
-		  BSpaceFilesResource filesResource = new BSpaceFilesResource(BSpaceMobileActivity.user, ClassViewActivity.bspaceClass);
+		  BSpaceFilesResource filesResource = new BSpaceFilesResource(BSpaceMobileActivity.currentUser, BSpaceMobileActivity.currentClass);
 		  
 		  String requestedDirectoryUrl = getIntent().getStringExtra("requestedDirectory");
 		  Log.d("filesview", "requested directory was " + requestedDirectoryUrl);

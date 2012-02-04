@@ -11,7 +11,6 @@ import android.text.Html;
 import android.util.Log;
 
 public class BSpaceFilesResource implements BSpaceResource {
-
     private BSpaceClass ownerClass;
     private BSpaceUser user;
 
