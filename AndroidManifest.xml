@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".ClassViewActivity" android:label="Classes">
+        <activity android:name=".ClassViewActivity" android:label="Classes"> </activity>
+        <activity android:name=".LinksViewActivity" android:label="Links"> </activity>
             
-        </activity>
     </application>
 
 </manifest>
