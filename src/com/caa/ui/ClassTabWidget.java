@@ -31,7 +31,7 @@ public class ClassTabWidget extends TabActivity {
         spec = tabHost.newTabSpec("links").setIndicator("Links", res.getDrawable(R.layout.linkstab)).setContent(intent);
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, SyllabusViewActivity.class);
+        intent = new Intent().setClass(this, SyllabusViewActivity2.class);
 
         spec = tabHost.newTabSpec("syllabus").setIndicator("Syllabus", res.getDrawable(R.layout.syllabustab)).setContent(intent);
         tabHost.addTab(spec);
