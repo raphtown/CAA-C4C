@@ -31,8 +31,7 @@ public class BSpaceUser {
     
     private static final String XPATH_CLASSES = "//ul[@id='siteLinkList']//a";
 
-    private LinkedList<BSpaceClass> classes;
-    public String htmlSource;
+    public LinkedList<BSpaceClass> classes; // Should be private
     private HttpClient httpClient;
     private CookieStore cookieStore;
     private HttpContext localContext;
@@ -49,7 +48,8 @@ public class BSpaceUser {
     
     private String getCalnetNoOpConversation(){
     	HttpGet calnetLoginGet = new HttpGet(BSPACE_LOGIN_URL);
-    	try{
+    	
+    	try {
 	    	HttpResponse response = httpClient.execute(calnetLoginGet, localContext);
 	    	BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 	    	String src = "";
@@ -92,18 +92,14 @@ public class BSpaceUser {
             while ((line = rd.readLine()) != null) {
                 sb.append(line);
             }
-            htmlSource = sb.toString();
-            Log.d(TAG, htmlSource);
         } catch (Exception e) {
         }
     }
     
     private String getMainPage() {
-    	HttpGet mainPageGet = new HttpGet(BSPACE_PORTAL_URL);
+    	HttpGet mainPageGet = new HttpGet(BSPACE_PORTAL_URL);    
     	
-    	System.out.println("IN getMainPage");
-    	
-    	try{
+    	try {
     		 HttpResponse response = httpClient.execute(mainPageGet, localContext);
     		 BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
              String line = "";
@@ -112,14 +108,12 @@ public class BSpaceUser {
                  sb.append(line);
              }
              parseClasses(sb.toString());
-             Log.d(TAG, htmlSource);
-    	} catch (Exception e){
+    	} catch (Exception e) {
     	}
     	return null;
     }
     
     private void parseClasses(String html) {
-        System.out.println("IN parseClasses");
         HtmlCleaner cleaner = new HtmlCleaner();
         TagNode root = cleaner.clean(html);
         
@@ -129,13 +123,28 @@ public class BSpaceUser {
                 TagNode el = (TagNode) obj;
                 String[] components = el.getAttributeByName("href").split("/");
                 if (components.length > 1)
-                    this.classes.add(new BSpaceClass(components[components.length - 1], el.getText().toString()));
+                    this.classes.add(new BSpaceClass(this, components[components.length - 1], el.getText().toString()));
             }
-            System.out.println("Class links: "+ this.classes.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public String openPage(String url) {
+        HttpGet get = new HttpGet(url);    
         
+        try {
+             HttpResponse response = httpClient.execute(get, localContext);
+             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+             String line = "";
+             StringBuilder sb = new StringBuilder();
+             while ((line = rd.readLine()) != null) {
+                 sb.append(line);
+             }
+             return sb.toString();
+        } catch (Exception e) {
+        }
+        return null;
     }
 
 }
