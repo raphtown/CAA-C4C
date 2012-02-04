@@ -1,1 +1,10 @@
-Testing eclipse git (from kedo)
+Native android interface for bspace
+
+Written by Kenneth Do, Jay Kong, Raphael Townshend, and Timothy Zhu.
+
+Targeted for Android 2.1
+
+Functionality:
+-Download files from resources page
+-View gradebook
+-View syllabus
