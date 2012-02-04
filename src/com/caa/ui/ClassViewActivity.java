@@ -44,6 +44,7 @@ public class ClassViewActivity extends ListActivity {
 	        int position, long id) {
 	      // When clicked, show a toast with the TextView text
 	    	Intent myIntent = new Intent(ClassViewActivity.this, ClassTabWidget.class);
+	    	bspaceClass = listItems.get(position);
 			 ClassViewActivity.this.startActivity(myIntent);
 	    }
 	  });

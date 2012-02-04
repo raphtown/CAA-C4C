@@ -13,12 +13,15 @@ import android.util.Log;
 
 public class BSpaceFilesResource {
 	
-	private String classUid;
+	private BSpaceClass bspaceClass;
 	private BSpaceUser user;
 	
-	private BSpaceDirectory rootDirectory;
+	public BSpaceDirectory rootDirectory;
 	
-	private class BSpaceFile{
+	public interface BSpaceFilesItem{
+	}
+	
+	public class BSpaceFile implements BSpaceFilesItem{
 		private BSpaceDirectory parentDirectory;
 		private String name;
 		
@@ -26,9 +29,13 @@ public class BSpaceFilesResource {
 			this.parentDirectory = parentDirectory;
 			this.name = name;
 		}
+		
+		public String toString(){
+			return name;
+		}
 	}
 	
-	private class BSpaceDirectory{
+	public class BSpaceDirectory implements BSpaceFilesItem{
 		public ArrayList<BSpaceDirectory> subdirectories;
 		public ArrayList<BSpaceFile> files;
 		
@@ -37,7 +44,11 @@ public class BSpaceFilesResource {
 		private String url;
 		
 		public BSpaceDirectory(){
-			url = "https://bspace.berkeley.edu/dav/" + classUid;
+			url = "https://bspace.berkeley.edu/dav/" + bspaceClass.uuid;
+		}
+		
+		public String toString(){
+			return name;
 		}
 		
 		public BSpaceDirectory(BSpaceDirectory parentDirectory, String name){
@@ -51,13 +62,19 @@ public class BSpaceFilesResource {
 		public void getItems(){
 			String html = user.openPageWithAuth(url);
 			
-			int tableStartIndex = html.indexOf("<table>") + "<table>".length();
-			int tableEndIndex = html.indexOf("</table>", tableStartIndex) - "</table>".length();
-			
-			String tableHtml = html.substring(tableStartIndex, tableEndIndex);
-			
 			subdirectories = new ArrayList<BSpaceDirectory>();
 			files = new ArrayList<BSpaceFile>();
+			
+			int tableStartIndex = html.indexOf("<table>") + "<table>".length();
+			int tableEndIndex = html.indexOf("</table>", tableStartIndex) - "</table>".length();
+			if(tableStartIndex == -1 || tableEndIndex == -1){
+				Log.d("bspaceFiles", html);
+				Log.w("bspacefiles", "unable to parse table");
+				return;
+			}
+			String tableHtml = html.substring(tableStartIndex, tableEndIndex);
+			
+			
 			
 			for(String tableRow : tableHtml.split("</tr>")){
 				String nameSegment = tableRow.split("</a>")[0];
@@ -67,10 +84,10 @@ public class BSpaceFilesResource {
 					continue;
 				}
 				if(subdirectories == null){
-					Log.e("panda", "SUBDIRECTORIES IS NULL");
+					Log.e("bspacefiles", "SUBDIRECTORIES IS NULL");
 				}
 				if(files == null){
-					Log.e("panda", "FILES IS NULL");
+					Log.e("bspacefiles", "FILES IS NULL");
 				}
 				if(tableRow.contains("<b>Folder</b>")){
 					Log.d("bspacefile", "Adding directory " + name);
@@ -83,8 +100,8 @@ public class BSpaceFilesResource {
 		}
 	}
 	
-	public BSpaceFilesResource(BSpaceUser user, String classUid){
-		this.classUid = classUid;
+	public BSpaceFilesResource(BSpaceUser user, BSpaceClass bspaceClass){
+		this.bspaceClass = bspaceClass;
 		this.user = user;
 		
 		rootDirectory = new BSpaceDirectory();
