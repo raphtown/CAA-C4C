@@ -1,9 +1,7 @@
 package com.caa.bspace;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 import org.apache.http.HttpResponse;
@@ -21,10 +19,14 @@ import org.apache.http.impl.client.BasicCookieStore;
 
 import android.util.Log;
 
-import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.ClientContext;
 
 public class BSpaceUser {
+    
+    public static final String TAG = "BSpaceUser";
+    
+    private static final String BSPACE_LOGIN_URL = "https://auth.berkeley.edu/cas/login?service=https%3A%2F%2Fbspace.berkeley.edu%2Fsakai-login-tool%2Fcontainer&renew=true";
+    private static final String BSPACE_PORTAL_URL = "https://bspace.berkeley.edu/portal/";
 
     public String htmlSource;
     private HttpClient httpClient;
@@ -32,32 +34,33 @@ public class BSpaceUser {
     private HttpContext localContext;
     
     private String getCalnetNoOpConversation(){
-    	HttpGet calnetLoginGet = new HttpGet("https://auth.berkeley.edu/cas/login?service=https%3A%2F%2Fbspace.berkeley.edu%2Fsakai-login-tool%2Fcontainer&renew=true");
+    	HttpGet calnetLoginGet = new HttpGet(BSPACE_LOGIN_URL);
     	try{
 	    	HttpResponse response = httpClient.execute(calnetLoginGet, localContext);
 	    	BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+	    	String src = "";
 	        String line = "";
 	        StringBuilder sb = new StringBuilder();
 	        while ((line = rd.readLine()) != null) {
 	            sb.append(line);
 	        }
-	        htmlSource = sb.toString();
+	        src = sb.toString();
 	        
-	        int startConversationIndex = htmlSource.indexOf("_cNoOpConversation");
-            int endConversationIndex = htmlSource.indexOf("\"", startConversationIndex);
+	        int startConversationIndex = src.indexOf("_cNoOpConversation");
+            int endConversationIndex = src.indexOf("\"", startConversationIndex);
             
-            String noOpConversation = htmlSource.substring(startConversationIndex, endConversationIndex);
-            Log.d("bspaceuser", noOpConversation);
+            String noOpConversation = src.substring(startConversationIndex, endConversationIndex);
+            Log.d(TAG, noOpConversation);
             return noOpConversation;
-    	} catch (Exception e){
+    	} catch (Exception e) {
     	}
     	return null;
     }
     
-    private void calnetLogin(String username, String password){
+    private void calnetLogin (String username, String password) {
     	String calnetNoOpConversation = getCalnetNoOpConversation();
-    	Log.d("bspaceuser", calnetNoOpConversation);
-    	HttpPost calnetLoginPost = new HttpPost("https://auth.berkeley.edu/cas/login?service=https%3A%2F%2Fbspace.berkeley.edu%2Fsakai-login-tool%2Fcontainer&renew=true");
+    	Log.d(TAG, calnetNoOpConversation);
+    	HttpPost calnetLoginPost = new HttpPost(BSPACE_LOGIN_URL);
     	
     	List<NameValuePair> loginNameValuePairs = new ArrayList<NameValuePair>(3);
         loginNameValuePairs.add(new BasicNameValuePair("username", username));
@@ -76,24 +79,25 @@ public class BSpaceUser {
                 sb.append(line);
             }
             htmlSource = sb.toString();
-            Log.d("bspaceuser", htmlSource);
+            Log.d(TAG, htmlSource);
         } catch (Exception e) {
-          //  Log.e("bspaceuser", "exception", e);
         }
     }
     
-    private String getMainPage(){
-    	HttpGet mainPageGet = new HttpGet("https://bspace.berkeley.edu/portal/");
+    private String getMainPage() {
+    	HttpGet mainPageGet = new HttpGet(BSPACE_PORTAL_URL);
     	
     	try{
     		 HttpResponse response = httpClient.execute(mainPageGet, localContext);
     		 BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
              String line = "";
+             StringBuilder sb = new StringBuilder();
              while ((line = rd.readLine()) != null) {
-            	 Log.d("bspaceuser", line);
+                 sb.append(line);
              }
+             htmlSource = sb.toString();
+             Log.d(TAG, htmlSource);
     	} catch (Exception e){
-    		Log.e("bspaceuser", "exception", e);
     	}
     	return "no";
     }

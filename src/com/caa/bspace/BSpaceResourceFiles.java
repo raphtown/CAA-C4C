@@ -8,8 +8,7 @@ public class BSpaceResourceFiles implements BSpaceResource {
 	public BSpaceResourceFiles(BSpaceUser user) {
 		this.user = user;
 		
-		String nextClass = this.user.classes.getFirst();
-		String[] components = { this.BSPACE_URL, this.BSPACE_DAV_URL, nextClass };
+		String[] components = { this.BSPACE_URL, this.BSPACE_DAV_URL };
 		System.out.println(BSpaceResourceFiles.implode("/", components));
 		System.out.println("999");
 	}
