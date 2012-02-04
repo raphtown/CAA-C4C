@@ -1,12 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="10dp" >
 
     <TextView
+        android:id="@+id/titlelabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:text="@string/app_name"
+        android:textSize="40sp" />
+
+    <EditText
+        android:id="@+id/loginentry"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello" />
+        android:layout_below="@+id/titlelabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:background="@android:drawable/editbox_background"
+        android:hint="@string/mainloginhint"
+        android:inputType="text"
+        android:textSize="30sp" >
 
-</LinearLayout>
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/passwordentry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/loginentry"
+        android:layout_alignRight="@+id/loginentry"
+        android:layout_below="@+id/loginentry"
+        android:layout_marginTop="28dp"
+        android:background="@android:drawable/editbox_background"
+        android:hint="@string/mainpasswordhint"
+        android:inputType="text"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/loginsubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passwordentry"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:text="@string/mainsubmit"
+        android:textSize="40sp" />
+
+</RelativeLayout>

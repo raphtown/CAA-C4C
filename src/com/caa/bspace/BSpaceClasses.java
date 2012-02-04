@@ -1,6 +1,7 @@
 package com.caa.bspace;
 
 import java.util.LinkedList;
+
 import org.htmlcleaner.*;
 
 public class BSpaceClasses {
