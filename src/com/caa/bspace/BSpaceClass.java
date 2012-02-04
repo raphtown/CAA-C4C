@@ -12,7 +12,7 @@ public class BSpaceClass {
     private static final String[] supportedTools = { "Syllabus", "Resources", "Gradebook" };
     
     private BSpaceUser user;
-    private String uuid, name;
+    public String uuid, name;
     private LinkedList<String> tools;
     
     public BSpaceClass(BSpaceUser user, String uuid, String name) {

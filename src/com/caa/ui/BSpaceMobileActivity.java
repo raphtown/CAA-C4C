@@ -18,7 +18,6 @@ import android.widget.TextView;
 public class BSpaceMobileActivity extends Activity implements OnClickListener {
     /** Called when the activity is first created. */
 	static BSpaceUser user;
-	volatile private boolean finished = false;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,26 +38,21 @@ public class BSpaceMobileActivity extends Activity implements OnClickListener {
 		ProgressBar mProgress = (ProgressBar) findViewById(R.id.loginprogress);
 		
 		
+		// DERP this doesn't work
 		mProgress.setVisibility(ProgressBar.VISIBLE);
-		new Thread(new Runnable() {
-            public void run() {
-            	String username = ((TextView)findViewById(R.id.loginentry)).getText().toString();
-        		String userpassword = ((TextView)findViewById(R.id.passwordentry)).getText().toString();
-        		
-            	BSpaceMobileActivity.user = new BSpaceUser(username,
-        				userpassword);
-            	
-            	finished = true;
-                }
-            }).start();
 		
-		while(user == null) { mProgress.setProgress(3); }
+    	String username = ((TextView)findViewById(R.id.loginentry)).getText().toString();
+		String userpassword = ((TextView)findViewById(R.id.passwordentry)).getText().toString();
+		
+    	BSpaceMobileActivity.user = new BSpaceUser(username,
+				userpassword);
+		
+		mProgress.setVisibility(ProgressBar.GONE);
 		
 
 		if(user.classes.size() == 0)
 		{
 			Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
-			mProgress.setVisibility(ProgressBar.GONE);
 			return;
 		}
 		
