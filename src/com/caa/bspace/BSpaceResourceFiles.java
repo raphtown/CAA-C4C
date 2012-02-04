@@ -1,6 +1,7 @@
 package com.caa.bspace;
 
 public class BSpaceResourceFiles implements BSpaceResource {
+	private String BSPACE_URL = "https://bspace.berkeley.edu";
 	private String BSPACE_DAV_URL = "dav";
 	private BSpaceUser user;
 	
@@ -8,8 +9,9 @@ public class BSpaceResourceFiles implements BSpaceResource {
 		this.user = user;
 		
 		String nextClass = this.user.classes.getFirst();
-		String[] components = { BSpaceConstants.BSPACE_URL, this.BSPACE_DAV_URL, nextClass };
+		String[] components = { this.BSPACE_URL, this.BSPACE_DAV_URL, nextClass };
 		System.out.println(BSpaceResourceFiles.implode("/", components));
+		System.out.println("999");
 	}
 	
 	private static String implode(String sep, String[] components) {
