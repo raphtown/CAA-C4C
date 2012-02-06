@@ -78,7 +78,6 @@ public class BSpaceMobileActivity extends Activity implements OnClickListener {
     	
     }
     
-	@Override
 	public void onClick(View arg0) {	
 		ProgressBar mProgress = (ProgressBar) findViewById(R.id.loginprogress);
 		
@@ -93,7 +92,6 @@ public class BSpaceMobileActivity extends Activity implements OnClickListener {
 		
 		Thread t = new Thread(new Runnable() {
 
-			@Override
 			public void run() {
 				String username = ((TextView)findViewById(R.id.loginentry)).getText().toString();
 				String userpassword = ((TextView)findViewById(R.id.passwordentry)).getText().toString();

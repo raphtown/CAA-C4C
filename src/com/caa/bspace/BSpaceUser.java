@@ -27,7 +27,6 @@ import org.apache.http.client.protocol.ClientContext;
 import org.htmlcleaner.*;
 
 public class BSpaceUser {
-    
     public static final String TAG = "BSpaceUser";
     
     private static final String BSPACE_LOGIN_URL = "https://auth.berkeley.edu/cas/login?service=https%3A%2F%2Fbspace.berkeley.edu%2Fsakai-login-tool%2Fcontainer&renew=true";

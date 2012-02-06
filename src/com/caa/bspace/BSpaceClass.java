@@ -10,8 +10,6 @@ public class BSpaceClass {
     private static final String BSPACE_CLASS_BASE_URL = "https://bspace.berkeley.edu/portal/site/";
     private static final String XPATH_SIDEBAR = "//div[@id='toolMenu']//a";
     
-    private static final String[] supportedResources = { "Syllabus", "Resources", "Gradebook" };
-    
     BSpaceUser user;
     public String uuid, name;
     public HashMap<String, String> uuidMap;
@@ -19,6 +17,7 @@ public class BSpaceClass {
     public BSpaceClass(BSpaceUser user, String uuid, String name) {
         this.user = user;
         this.uuid = uuid;
+        this.uuidMap = new HashMap<String, String>();
         this.name = Html.fromHtml(name).toString();
     }
     
@@ -31,31 +30,27 @@ public class BSpaceClass {
         
         try {
             Object[] sidebarEls = root.evaluateXPath(XPATH_SIDEBAR);
-            HashSet<String> supported = new HashSet<String>(Arrays.asList(supportedResources));
-            HashSet<String> actual = new HashSet<String>();
-            uuidMap = new HashMap<String, String>();
             
             for (Object obj : sidebarEls) {
                 TagNode el = (TagNode) obj;
                 String[] components = el.getAttributeByName("href").split("/");
                 try {
-                    UUID uuidTest = UUID.fromString(components[components.length - 1]);
+                	String potentialUuid = components[components.length - 1];
+                    UUID uuidTest = UUID.fromString(potentialUuid);
                     String name = ((TagNode) el.evaluateXPath("span")[0]).getText().toString();
-                    String uuid = components[components.length - 1];
-                    actual.add(name);
-                    uuidMap.put(name, uuid);
+                    uuidMap.put(name, potentialUuid);
                 } catch (Exception e) {
-                    // not a valid UUID; do nothing
                 }
             }
-//            supported.retainAll(actual); // Intersect support and actual resource list; result stored in supported
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
     
     public String toString() {
     	return name;
     }
-
+    
+    public String getResourceUuid(String resourceName) {
+    	return uuidMap.get(resourceName);
+    }
 }
